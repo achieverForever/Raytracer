@@ -59,7 +59,6 @@ int main(int argc,char* argv[])
 	FreeImage_Initialise();
 
 	string sceneFile;
-	//sceneFile = "testscenes/scene3.test";
 	cout << "Enter the Scene File: ";
 	cin >> sceneFile;
 	ReadFile(sceneFile.c_str());

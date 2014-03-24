@@ -20,7 +20,6 @@ bool Sphere::Hit(const Ray &viewRay, float baseT, float maxT, HitRecord &rec)
 
 	if(invTransf)
 	{
-		// NEW	
 		// For simplicity, transform the ray to sphere's Model Space for intersection test
 		TransformRay(localRay, (*invTransf));
 	}
@@ -58,7 +57,6 @@ bool Sphere::Hit(const Ray &viewRay, float baseT, float maxT, HitRecord &rec)
 			{
 				vec3 localHitPoint = localRay.GetIntersectPoint(tMin);
 				vec3 localNormal = (localHitPoint- c) / radius;
-				// NEW
 				if(transf && invTransf)
 				{	
 					// Transform local hit point and normal back to world space

@@ -7,14 +7,11 @@ Color RayTracer::Trace(const Ray &ray, vector<Surface*> &objects, list<Light> &l
 	Color color(0.0f);
 
 	if(depth == 0)
-	{
-		//cout << "Recursion Ends - Depth became 0\n";
 		return color;
-	}
 
 	HitRecord rec;
 	bool isHitAny = false;
-	float lastMinT = kRayMaxT;			// Keep track of the closest intersection
+	float lastMinT = kRayMaxT;	// Keep track of the closest intersection
 	vec3 hitPoint, L, H, V;
 	vec3 shadowRayDir, reflDir;
 	Ray shadowRay, reflRay;
@@ -32,8 +29,6 @@ Color RayTracer::Trace(const Ray &ray, vector<Surface*> &objects, list<Light> &l
 		{
 			// If we get a closer hit, update lastMinT
 			isHitAny = true;
-			// NEW
-			//lastMinT = rec.t;
 			lastMinT = glm::length(ray.origin - rec.hitPoint);
 		}
 	}
@@ -44,8 +39,6 @@ Color RayTracer::Trace(const Ray &ray, vector<Surface*> &objects, list<Light> &l
 		const Color &diff = rec.material->diffuse;
 		const Color &spec = rec.material->specular;
 		const vec3 &N = rec.normal;
-		//hitPoint = ray.GetIntersectPoint(rec.t);
-		// NEW
 		hitPoint = rec.hitPoint;
 
 		V = glm::normalize(ray.origin - hitPoint);
@@ -54,8 +47,6 @@ Color RayTracer::Trace(const Ray &ray, vector<Surface*> &objects, list<Light> &l
 		color += rec.material->ambient + rec.material->emission;
 
 		// Calculate the Reflection Ray, then trace it
-		// NEW
-		//reflDir = ray.direction - 2.0f * glm::dot(ray.direction, N) * N;
 		reflDir = glm::reflect(ray.direction, N);
 		reflRay = Ray(hitPoint, reflDir);
 		color += Trace(reflRay, objects, lights, depth-1) * spec;
@@ -69,20 +60,6 @@ Color RayTracer::Trace(const Ray &ray, vector<Surface*> &objects, list<Light> &l
 			Light &light = (*iter2);
 
 			// Cast a Shadow Ray from hitPoint to light
-			// NEW
-/*
-			vec3 offset = N * 0.001f;
-			if(light.type != DIRECTIONAL)
-			{
-				shadowRayDir = light.GetLightDirection(hitPoint);
-				distance = glm::length((light.position - hitPoint));
-				shadowRay = Ray(hitPoint+offset, shadowRayDir, kRayMinT, distance);
-			}
-			else
-			{
-				shadowRayDir = light.GetLightDirection(hitPoint);
-				shadowRay = Ray(hitPoint+offset, shadowRayDir, kRayMinT, kRayMaxT);
-			}*/
 			if(light.type != DIRECTIONAL)
 			{
 				shadowRayDir = light.GetLightDirection(hitPoint);
@@ -136,7 +113,6 @@ Color RayTracer::Trace(const Ray &ray, vector<Surface*> &objects, list<Light> &l
 	}
 	else
 	{
-		//printf("Recursion Ends - No Intersection\n");
 		return color;	// No intersection, just return black
 	}
 }
